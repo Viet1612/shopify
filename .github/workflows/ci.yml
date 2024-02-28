@@ -1,0 +1,27 @@
+name: Theme deploy
+
+on: [push]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler: 'latest'
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli @shopify/theme
+      - name: Deploy
+        env:
+          # Store URL, like your-store.myshopify.com
+          SHOPIFY_FLAG_STORE: 'duck6868.myshopify.com'
+          # Password generated from Theme Access app
+          SHOPIFY_CLI_THEME_TOKEN: shptka_970e1fa44c98e7fd1e338da154c7d7c5
+          SHOPIFY_CLI_TTY: 0
+        run: shopify theme push --path ./ --theme 135069827223
